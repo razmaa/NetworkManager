@@ -2,7 +2,7 @@
 // https://docs.swift.org/swift-book
 
 import Foundation
-
+import UIKit
 final public class GenericNetworkManager {
     private let baseURL: String
     private let endpoint = ""
