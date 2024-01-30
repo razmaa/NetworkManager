@@ -40,4 +40,29 @@ final public class GenericNetworkManager {
             }
         }.resume()
     }
+    
+    public func fetchImage(endpoint: String, completion: @escaping (Result<UIImage, Error>) -> Void) {
+        let urlString = "\(baseURL + endpoint)"
+        
+        guard let url = URL(string: urlString) else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data, let image = UIImage(data: data) else {
+                completion(.failure(NSError(domain: "", code: -2, userInfo: [NSLocalizedDescriptionKey: "No data received or failed to create image from data"])))
+                return
+            }
+            
+            DispatchQueue.main.async {
+                completion(.success(image))
+            }
+        }.resume()
+    }
 }
